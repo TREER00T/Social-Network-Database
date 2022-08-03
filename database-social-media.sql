@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2022 at 10:28 AM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 7.3.31
+-- Generation Time: Aug 03, 2022 at 08:52 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.0.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,41 +18,95 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `database-social-media`
+-- Database: `social_network`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `090307892andazi1578cat_e2e_data`
+-- Table structure for table `1and2e2econtents`
 --
 
-CREATE TABLE `090307892andazi1578cat_e2e_data` (
-  `sender_id` int(11) DEFAULT NULL,
-  `receiver_id` int(11) DEFAULT NULL,
-  `date` datetime DEFAULT NULL,
-  `message_type_id` int(1) DEFAULT NULL,
-  `file_url` varchar(130) DEFAULT NULL,
-  `text` varchar(4096) DEFAULT NULL,
-  `is_reply` bit(1) DEFAULT NULL,
-  `target_reply_id` int(11) DEFAULT NULL,
-  `forward_data_id` int(11) DEFAULT NULL,
-  `file_name` varchar(255) DEFAULT NULL,
-  `file_size` varchar(255) DEFAULT NULL,
-  `is_forward` bit(1) DEFAULT NULL,
-  `id` int(11) NOT NULL
+CREATE TABLE `1and2e2econtents` (
+  `id` int(11) NOT NULL,
+  `text` varchar(4096) NOT NULL,
+  `date` datetime NOT NULL,
+  `type` enum('None','Image','Location','Document','Video','Voice') NOT NULL,
+  `isReply` tinyint(1) NOT NULL,
+  `fileUrl` varchar(130) NOT NULL,
+  `senderId` int(11) NOT NULL,
+  `fileName` varchar(15) NOT NULL,
+  `fileSize` varchar(15) NOT NULL,
+  `location` point DEFAULT NULL,
+  `isForward` tinyint(1) NOT NULL,
+  `targetReplyId` int(11) NOT NULL,
+  `forwardDataId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `block_list`
+-- Table structure for table `1channelcontents`
 --
 
-CREATE TABLE `block_list` (
+CREATE TABLE `1channelcontents` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `user_target_id` int(11) DEFAULT NULL
+  `text` varchar(4096) NOT NULL,
+  `date` datetime NOT NULL,
+  `type` enum('None','Image','Location','Document','Video','Voice') NOT NULL,
+  `isReply` tinyint(1) NOT NULL,
+  `fileUrl` varchar(130) NOT NULL,
+  `senderId` int(11) NOT NULL,
+  `fileName` varchar(15) NOT NULL,
+  `fileSize` varchar(15) NOT NULL,
+  `location` point DEFAULT NULL,
+  `isForward` tinyint(1) NOT NULL,
+  `targetReplyId` int(11) NOT NULL,
+  `forwardDataId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `1groupcontents`
+--
+
+CREATE TABLE `1groupcontents` (
+  `id` int(11) NOT NULL,
+  `text` varchar(4096) NOT NULL,
+  `date` datetime NOT NULL,
+  `type` enum('None','Image','Location','Document','Video','Voice') NOT NULL,
+  `isReply` tinyint(1) NOT NULL,
+  `fileUrl` varchar(130) NOT NULL,
+  `senderId` int(11) NOT NULL,
+  `fileName` varchar(15) NOT NULL,
+  `fileSize` varchar(15) NOT NULL,
+  `location` point DEFAULT NULL,
+  `isForward` tinyint(1) NOT NULL,
+  `targetReplyId` int(11) NOT NULL,
+  `forwardDataId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `09030207892savedmessages`
+--
+
+CREATE TABLE `09030207892savedmessages` (
+  `id` int(11) NOT NULL,
+  `text` varchar(4096) NOT NULL,
+  `date` datetime NOT NULL,
+  `type` enum('None','Image','Location','Document','Video','Voice') NOT NULL,
+  `isReply` tinyint(1) NOT NULL,
+  `fileUrl` varchar(130) NOT NULL,
+  `senderId` int(11) NOT NULL,
+  `fileName` varchar(15) NOT NULL,
+  `fileSize` varchar(15) NOT NULL,
+  `location` point DEFAULT NULL,
+  `isForward` tinyint(1) NOT NULL,
+  `targetReplyId` int(11) NOT NULL,
+  `forwardDataId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -62,85 +116,39 @@ CREATE TABLE `block_list` (
 --
 
 CREATE TABLE `channels` (
-  `name` varchar(70) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `invite_link` varchar(100) DEFAULT NULL,
   `id` int(11) NOT NULL,
-  `img` varchar(130) DEFAULT NULL,
-  `public_link` varchar(100) DEFAULT NULL
+  `img` varchar(130) NOT NULL,
+  `name` varchar(70) NOT NULL,
+  `inviteLink` varchar(100) NOT NULL,
+  `publicLink` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `defaultColor` varchar(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `channel_admin`
+-- Table structure for table `channelsadmins`
 --
 
-CREATE TABLE `channel_admin` (
-  `channel_id` int(11) DEFAULT NULL,
+CREATE TABLE `channelsadmins` (
   `id` int(11) NOT NULL,
-  `is_owner` bit(1) DEFAULT NULL,
-  `admin_id` int(11) DEFAULT NULL
+  `adminId` int(11) NOT NULL,
+  `isOwner` tinyint(1) NOT NULL,
+  `channelId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `channel_joins`
+-- Table structure for table `channelsusers`
 --
 
-CREATE TABLE `channel_joins` (
-  `user_id` int(11) DEFAULT NULL,
-  `channel_id` int(11) DEFAULT NULL,
-  `id` int(11) NOT NULL
+CREATE TABLE `channelsusers` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `channelId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `const_message_type`
---
-
-CREATE TABLE `const_message_type` (
-  `type` varchar(8) DEFAULT NULL,
-  `id` int(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `const_message_type`
---
-
-INSERT INTO `const_message_type` (`type`, `id`) VALUES
-('Image', 1),
-('Location', 2),
-('Document', 3),
-('Video', 4),
-('Voice', 5);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `const_report_type`
---
-
-CREATE TABLE `const_report_type` (
-  `id` int(1) NOT NULL,
-  `type` varchar(16) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `const_report_type`
---
-
-INSERT INTO `const_report_type` (`id`, `type`) VALUES
-(1, 'Spam'),
-(2, 'Fake Account'),
-(3, 'Violence'),
-(4, 'Child Abuse'),
-(5, 'Illegal Drugs'),
-(6, 'Personal Details'),
-(7, 'Pornography'),
-(8, 'Other');
 
 -- --------------------------------------------------------
 
@@ -150,43 +158,24 @@ INSERT INTO `const_report_type` (`id`, `type`) VALUES
 
 CREATE TABLE `devices` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `device_name` varchar(50) DEFAULT NULL,
-  `device_ip` varchar(15) DEFAULT NULL,
-  `device_location` varchar(50) DEFAULT NULL,
-  `created_at` datetime DEFAULT NULL
+  `userId` int(11) NOT NULL,
+  `deviceIp` varchar(15) NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `deviceName` varchar(50) NOT NULL,
+  `deviceLocation` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forward_data`
+-- Table structure for table `forwardcontents`
 --
 
-CREATE TABLE `forward_data` (
+CREATE TABLE `forwardcontents` (
   `id` int(11) NOT NULL,
-  `conversation_id` int(11) DEFAULT NULL,
-  `type_conversation` enum('group','channel','e2e','personal') DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `googleandroid_group_data`
---
-
-CREATE TABLE `googleandroid_group_data` (
-  `text` varchar(4096) DEFAULT NULL,
-  `id` int(11) NOT NULL,
-  `date` datetime DEFAULT NULL,
-  `message_type_id` int(1) DEFAULT NULL,
-  `file_url` varchar(130) DEFAULT NULL,
-  `is_reply` bit(1) DEFAULT NULL,
-  `target_reply_id` int(11) DEFAULT NULL,
-  `forward_data_id` int(11) DEFAULT NULL,
-  `file_name` varchar(12) DEFAULT NULL,
-  `file_size` varchar(10) DEFAULT NULL,
-  `is_forward` bit(1) DEFAULT NULL
+  `messageId` int(11) DEFAULT NULL,
+  `conversationId` longtext NOT NULL,
+  `conversationType` enum('Group','Channel','E2E','Personal''Group','Channel','E2E','Personal') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -196,109 +185,88 @@ CREATE TABLE `googleandroid_group_data` (
 --
 
 CREATE TABLE `groups` (
-  `name` varchar(70) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
   `id` int(11) NOT NULL,
-  `img` varchar(130) DEFAULT NULL,
-  `invite_link` varchar(100) DEFAULT NULL,
-  `public_link` varchar(100) DEFAULT NULL
+  `img` varchar(130) NOT NULL,
+  `name` varchar(70) NOT NULL,
+  `inviteLink` varchar(100) NOT NULL,
+  `publicLink` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `defaultColor` varchar(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `group_admin`
+-- Table structure for table `groupsadmins`
 --
 
-CREATE TABLE `group_admin` (
-  `group_id` int(11) DEFAULT NULL,
-  `is_owner` bit(1) DEFAULT NULL,
-  `admin_id` int(11) DEFAULT NULL,
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `group_joins`
---
-
-CREATE TABLE `group_joins` (
+CREATE TABLE `groupsadmins` (
   `id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `group_id` int(11) DEFAULT NULL
+  `adminId` int(11) NOT NULL,
+  `groupId` int(11) NOT NULL,
+  `isOwner` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mohsenpack_channel_data`
+-- Table structure for table `groupsusers`
 --
 
-CREATE TABLE `mohsenpack_channel_data` (
-  `text` varchar(4096) DEFAULT NULL,
+CREATE TABLE `groupsusers` (
   `id` int(11) NOT NULL,
-  `date` datetime DEFAULT NULL,
-  `file_url` varchar(130) DEFAULT NULL,
-  `message_type_id` int(1) DEFAULT NULL,
-  `is_reply` bit(1) DEFAULT NULL,
-  `target_reply_id` int(11) DEFAULT NULL,
-  `forward_data_id` int(11) DEFAULT NULL,
-  `file_name` varchar(12) DEFAULT NULL,
-  `file_size` varchar(10) DEFAULT NULL,
-  `is_forward` bit(1) DEFAULT NULL
+  `userId` int(11) NOT NULL,
+  `groupId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `report_channel`
+-- Table structure for table `listofuserchannels`
 --
 
-CREATE TABLE `report_channel` (
-  `user_id` int(11) DEFAULT NULL,
-  `channel_id` int(11) DEFAULT NULL,
-  `type_id` int(1) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `status` enum('accept','pending','decline') DEFAULT NULL,
-  `accept_at` varchar(16) DEFAULT NULL,
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `report_group`
---
-
-CREATE TABLE `report_group` (
-  `user_id` int(11) DEFAULT NULL,
-  `group_id` int(11) DEFAULT NULL,
-  `type_id` int(1) DEFAULT NULL,
-  `notes` varchar(255) DEFAULT NULL,
-  `status` enum('accept','pending','decline') DEFAULT NULL,
-  `accept_at` varchar(16) DEFAULT NULL,
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `treer00t_personal_chat_data`
---
-
-CREATE TABLE `treer00t_personal_chat_data` (
-  `text` varchar(4096) DEFAULT NULL,
+CREATE TABLE `listofuserchannels` (
   `id` int(11) NOT NULL,
-  `date` datetime DEFAULT NULL,
-  `message_type_id` int(1) DEFAULT NULL,
-  `file_url` varchar(130) DEFAULT NULL,
-  `is_reply` bit(1) DEFAULT NULL,
-  `target_reply_id` int(11) DEFAULT NULL,
-  `forward_data_id` int(11) DEFAULT NULL,
-  `file_name` varchar(12) DEFAULT NULL,
-  `file_size` varchar(10) DEFAULT NULL,
-  `is_forward` bit(1) DEFAULT NULL
+  `userId` int(11) NOT NULL,
+  `channelId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `listofusere2es`
+--
+
+CREATE TABLE `listofusere2es` (
+  `id` int(11) NOT NULL,
+  `toUser` int(11) NOT NULL,
+  `fromUser` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `tblChatId` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `listofusergroups`
+--
+
+CREATE TABLE `listofusergroups` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `groupId` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userblocklist`
+--
+
+CREATE TABLE `userblocklist` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `userTargetId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -308,55 +276,20 @@ CREATE TABLE `treer00t_personal_chat_data` (
 --
 
 CREATE TABLE `users` (
-  `phone` varchar(20) DEFAULT NULL,
-  `authCode` int(6) DEFAULT NULL,
-  `bio` varchar(70) DEFAULT NULL,
-  `username` varchar(32) DEFAULT NULL,
-  `img` varchar(130) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `first_name` varchar(20) DEFAULT NULL,
-  `last_name` varchar(20) DEFAULT NULL,
-  `is_active` bit(1) DEFAULT NULL,
-  `is_blocked` bit(1) DEFAULT NULL,
   `id` int(11) NOT NULL,
-  `api_key` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_channel_chat_list`
---
-
-CREATE TABLE `user_channel_chat_list` (
-  `group_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_e2e_chat_list`
---
-
-CREATE TABLE `user_e2e_chat_list` (
-  `chat_tbl_id` varchar(100) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user_group_chat_list`
---
-
-CREATE TABLE `user_group_chat_list` (
-  `group_id` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `id` int(11) NOT NULL
+  `img` varchar(130) NOT NULL,
+  `bio` varchar(70) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `apiKey` varchar(255) NOT NULL,
+  `isActive` tinyint(1) NOT NULL,
+  `authCode` int(6) NOT NULL,
+  `username` varchar(32) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `lastName` varchar(20) NOT NULL,
+  `isBlocked` tinyint(1) NOT NULL,
+  `defaultColor` varchar(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -364,139 +297,126 @@ CREATE TABLE `user_group_chat_list` (
 --
 
 --
--- Indexes for table `090307892andazi1578cat_e2e_data`
+-- Indexes for table `1and2e2econtents`
 --
-ALTER TABLE `090307892andazi1578cat_e2e_data`
+ALTER TABLE `1and2e2econtents`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `090307892ANDAZI1578Cat_E2e_Data_Text_Msg` (`text`(768)),
-  ADD KEY `forwardDataId4` (`forward_data_id`),
-  ADD KEY `messageTypeId2` (`message_type_id`),
-  ADD KEY `receiverId3` (`receiver_id`),
-  ADD KEY `senderId1` (`sender_id`);
+  ADD KEY `1and2e2econtents_ibfk_1` (`forwardDataId`),
+  ADD KEY `1and2e2econtents_ibfk_2` (`senderId`);
 
 --
--- Indexes for table `block_list`
+-- Indexes for table `1channelcontents`
 --
-ALTER TABLE `block_list`
+ALTER TABLE `1channelcontents`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `userId5` (`user_id`),
-  ADD KEY `userTargetId6` (`user_target_id`);
+  ADD KEY `1channelcontents_ibfk_1` (`forwardDataId`),
+  ADD KEY `1channelcontents_ibfk_2` (`senderId`);
+
+--
+-- Indexes for table `1groupcontents`
+--
+ALTER TABLE `1groupcontents`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `1groupcontents_ibfk_1` (`forwardDataId`),
+  ADD KEY `1groupcontents_ibfk_2` (`senderId`);
+
+--
+-- Indexes for table `09030207892savedmessages`
+--
+ALTER TABLE `09030207892savedmessages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `09030207892savedmessages_ibfk_1` (`forwardDataId`),
+  ADD KEY `09030207892savedmessages_ibfk_2` (`senderId`);
 
 --
 -- Indexes for table `channels`
 --
 ALTER TABLE `channels`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `Channels_Name` (`name`);
-
---
--- Indexes for table `channel_admin`
---
-ALTER TABLE `channel_admin`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `adminId7` (`admin_id`),
-  ADD KEY `channelId8` (`channel_id`);
-
---
--- Indexes for table `channel_joins`
---
-ALTER TABLE `channel_joins`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `userId9` (`user_id`),
-  ADD KEY `channelId10` (`channel_id`);
-
---
--- Indexes for table `const_message_type`
---
-ALTER TABLE `const_message_type`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `const_report_type`
+-- Indexes for table `channelsadmins`
 --
-ALTER TABLE `const_report_type`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `channelsadmins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `channelsadmins_ibfk_1` (`adminId`),
+  ADD KEY `channelsadmins_ibfk_2` (`channelId`);
+
+--
+-- Indexes for table `channelsusers`
+--
+ALTER TABLE `channelsusers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `channelsusers_ibfk_1` (`channelId`),
+  ADD KEY `channelsusers_ibfk_2` (`userId`);
 
 --
 -- Indexes for table `devices`
 --
 ALTER TABLE `devices`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `userId11` (`user_id`);
+  ADD KEY `devices_ibfk_1` (`userId`);
 
 --
--- Indexes for table `forward_data`
+-- Indexes for table `forwardcontents`
 --
-ALTER TABLE `forward_data`
+ALTER TABLE `forwardcontents`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `googleandroid_group_data`
---
-ALTER TABLE `googleandroid_group_data`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `GoogleAndroid_Group_Data_Text_Msg` (`text`(768)),
-  ADD KEY `messageTypeId12` (`message_type_id`),
-  ADD KEY `forwardDataId13` (`forward_data_id`);
 
 --
 -- Indexes for table `groups`
 --
 ALTER TABLE `groups`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `Groups_Name` (`name`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `group_admin`
+-- Indexes for table `groupsadmins`
 --
-ALTER TABLE `group_admin`
+ALTER TABLE `groupsadmins`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `adminId14` (`admin_id`),
-  ADD KEY `groupId15` (`group_id`);
+  ADD KEY `groupsadmins_ibfk_1` (`adminId`),
+  ADD KEY `groupsadmins_ibfk_2` (`groupId`);
 
 --
--- Indexes for table `group_joins`
+-- Indexes for table `groupsusers`
 --
-ALTER TABLE `group_joins`
+ALTER TABLE `groupsusers`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `userId16` (`user_id`),
-  ADD KEY `groupId17` (`group_id`);
+  ADD KEY `groupsusers_ibfk_1` (`groupId`),
+  ADD KEY `groupsusers_ibfk_2` (`userId`);
 
 --
--- Indexes for table `mohsenpack_channel_data`
+-- Indexes for table `listofuserchannels`
 --
-ALTER TABLE `mohsenpack_channel_data`
+ALTER TABLE `listofuserchannels`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `MohsenPack_Channel_Data_Text_Msg` (`text`(768)),
-  ADD KEY `messageTypeId` (`message_type_id`),
-  ADD KEY `forwardDataId` (`forward_data_id`);
+  ADD KEY `listofuserchannels_ibfk_1` (`channelId`),
+  ADD KEY `listofuserchannels_ibfk_2` (`userId`);
 
 --
--- Indexes for table `report_channel`
+-- Indexes for table `listofusere2es`
 --
-ALTER TABLE `report_channel`
+ALTER TABLE `listofusere2es`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `userId18` (`user_id`),
-  ADD KEY `channelId19` (`channel_id`),
-  ADD KEY `typeId20` (`type_id`);
+  ADD KEY `fromUser` (`fromUser`),
+  ADD KEY `toUser` (`toUser`),
+  ADD KEY `userId` (`userId`);
 
 --
--- Indexes for table `report_group`
+-- Indexes for table `listofusergroups`
 --
-ALTER TABLE `report_group`
+ALTER TABLE `listofusergroups`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `userId21` (`user_id`),
-  ADD KEY `groupId22` (`group_id`),
-  ADD KEY `typeId23` (`type_id`);
+  ADD KEY `listofusergroups_ibfk_1` (`groupId`),
+  ADD KEY `listofusergroups_ibfk_2` (`userId`);
 
 --
--- Indexes for table `treer00t_personal_chat_data`
+-- Indexes for table `userblocklist`
 --
-ALTER TABLE `treer00t_personal_chat_data`
+ALTER TABLE `userblocklist`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `TREER00T_Personal_Chat_Data_Text_Msg` (`text`(768)),
-  ADD KEY `messageTypeId25` (`message_type_id`),
-  ADD KEY `forwardDataId26` (`forward_data_id`);
+  ADD KEY `userblocklist_ibfk_1` (`userId`),
+  ADD KEY `userblocklist_ibfk_2` (`userTargetId`);
 
 --
 -- Indexes for table `users`
@@ -505,42 +425,31 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user_channel_chat_list`
---
-ALTER TABLE `user_channel_chat_list`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `channelId27` (`group_id`),
-  ADD KEY `userId28` (`user_id`);
-
---
--- Indexes for table `user_e2e_chat_list`
---
-ALTER TABLE `user_e2e_chat_list`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `userId29` (`user_id`);
-
---
--- Indexes for table `user_group_chat_list`
---
-ALTER TABLE `user_group_chat_list`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `userId30` (`user_id`),
-  ADD KEY `groupId31` (`group_id`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT for table `090307892andazi1578cat_e2e_data`
+-- AUTO_INCREMENT for table `1and2e2econtents`
 --
-ALTER TABLE `090307892andazi1578cat_e2e_data`
+ALTER TABLE `1and2e2econtents`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `block_list`
+-- AUTO_INCREMENT for table `1channelcontents`
 --
-ALTER TABLE `block_list`
+ALTER TABLE `1channelcontents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `1groupcontents`
+--
+ALTER TABLE `1groupcontents`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `09030207892savedmessages`
+--
+ALTER TABLE `09030207892savedmessages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -550,28 +459,16 @@ ALTER TABLE `channels`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `channel_admin`
+-- AUTO_INCREMENT for table `channelsadmins`
 --
-ALTER TABLE `channel_admin`
+ALTER TABLE `channelsadmins`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `channel_joins`
+-- AUTO_INCREMENT for table `channelsusers`
 --
-ALTER TABLE `channel_joins`
+ALTER TABLE `channelsusers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `const_message_type`
---
-ALTER TABLE `const_message_type`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `const_report_type`
---
-ALTER TABLE `const_report_type`
-  MODIFY `id` int(1) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `devices`
@@ -580,15 +477,9 @@ ALTER TABLE `devices`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `forward_data`
+-- AUTO_INCREMENT for table `forwardcontents`
 --
-ALTER TABLE `forward_data`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `googleandroid_group_data`
---
-ALTER TABLE `googleandroid_group_data`
+ALTER TABLE `forwardcontents`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -598,39 +489,39 @@ ALTER TABLE `groups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `group_admin`
+-- AUTO_INCREMENT for table `groupsadmins`
 --
-ALTER TABLE `group_admin`
+ALTER TABLE `groupsadmins`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `group_joins`
+-- AUTO_INCREMENT for table `groupsusers`
 --
-ALTER TABLE `group_joins`
+ALTER TABLE `groupsusers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `mohsenpack_channel_data`
+-- AUTO_INCREMENT for table `listofuserchannels`
 --
-ALTER TABLE `mohsenpack_channel_data`
+ALTER TABLE `listofuserchannels`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `report_channel`
+-- AUTO_INCREMENT for table `listofusere2es`
 --
-ALTER TABLE `report_channel`
+ALTER TABLE `listofusere2es`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `report_group`
+-- AUTO_INCREMENT for table `listofusergroups`
 --
-ALTER TABLE `report_group`
+ALTER TABLE `listofusergroups`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `treer00t_personal_chat_data`
+-- AUTO_INCREMENT for table `userblocklist`
 --
-ALTER TABLE `treer00t_personal_chat_data`
+ALTER TABLE `userblocklist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -640,133 +531,99 @@ ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user_channel_chat_list`
---
-ALTER TABLE `user_channel_chat_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user_e2e_chat_list`
---
-ALTER TABLE `user_e2e_chat_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `user_group_chat_list`
---
-ALTER TABLE `user_group_chat_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- Constraints for dumped tables
 --
 
 --
--- Constraints for table `090307892andazi1578cat_e2e_data`
+-- Constraints for table `1and2e2econtents`
 --
-ALTER TABLE `090307892andazi1578cat_e2e_data`
-  ADD CONSTRAINT `forwardDataId4` FOREIGN KEY (`forward_data_id`) REFERENCES `forward_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `messageTypeId2` FOREIGN KEY (`message_type_id`) REFERENCES `const_message_type` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `receiverId3` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `senderId1` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `1and2e2econtents`
+  ADD CONSTRAINT `1and2e2econtents_ibfk_1` FOREIGN KEY (`forwardDataId`) REFERENCES `forwardcontents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `1and2e2econtents_ibfk_2` FOREIGN KEY (`senderId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `block_list`
+-- Constraints for table `1channelcontents`
 --
-ALTER TABLE `block_list`
-  ADD CONSTRAINT `userId5` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `userTargetId6` FOREIGN KEY (`user_target_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `1channelcontents`
+  ADD CONSTRAINT `1channelcontents_ibfk_1` FOREIGN KEY (`forwardDataId`) REFERENCES `forwardcontents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `1channelcontents_ibfk_2` FOREIGN KEY (`senderId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `channel_admin`
+-- Constraints for table `1groupcontents`
 --
-ALTER TABLE `channel_admin`
-  ADD CONSTRAINT `adminId7` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `channelId8` FOREIGN KEY (`channel_id`) REFERENCES `channels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `1groupcontents`
+  ADD CONSTRAINT `1groupcontents_ibfk_1` FOREIGN KEY (`forwardDataId`) REFERENCES `forwardcontents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `1groupcontents_ibfk_2` FOREIGN KEY (`senderId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `channel_joins`
+-- Constraints for table `09030207892savedmessages`
 --
-ALTER TABLE `channel_joins`
-  ADD CONSTRAINT `channelId10` FOREIGN KEY (`channel_id`) REFERENCES `channels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `userId9` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `09030207892savedmessages`
+  ADD CONSTRAINT `09030207892savedmessages_ibfk_1` FOREIGN KEY (`forwardDataId`) REFERENCES `forwardcontents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `09030207892savedmessages_ibfk_2` FOREIGN KEY (`senderId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `channelsadmins`
+--
+ALTER TABLE `channelsadmins`
+  ADD CONSTRAINT `channelsadmins_ibfk_1` FOREIGN KEY (`adminId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `channelsadmins_ibfk_2` FOREIGN KEY (`channelId`) REFERENCES `channels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `channelsusers`
+--
+ALTER TABLE `channelsusers`
+  ADD CONSTRAINT `channelsusers_ibfk_1` FOREIGN KEY (`channelId`) REFERENCES `channels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `channelsusers_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `devices`
 --
 ALTER TABLE `devices`
-  ADD CONSTRAINT `userId11` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `devices_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `googleandroid_group_data`
+-- Constraints for table `groupsadmins`
 --
-ALTER TABLE `googleandroid_group_data`
-  ADD CONSTRAINT `forwardDataId13` FOREIGN KEY (`forward_data_id`) REFERENCES `forward_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `messageTypeId12` FOREIGN KEY (`message_type_id`) REFERENCES `const_message_type` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+ALTER TABLE `groupsadmins`
+  ADD CONSTRAINT `groupsadmins_ibfk_1` FOREIGN KEY (`adminId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `groupsadmins_ibfk_2` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `group_admin`
+-- Constraints for table `groupsusers`
 --
-ALTER TABLE `group_admin`
-  ADD CONSTRAINT `adminId14` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `groupId15` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `groupsusers`
+  ADD CONSTRAINT `groupsusers_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `groupsusers_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `group_joins`
+-- Constraints for table `listofuserchannels`
 --
-ALTER TABLE `group_joins`
-  ADD CONSTRAINT `groupId17` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `userId16` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `listofuserchannels`
+  ADD CONSTRAINT `listofuserchannels_ibfk_1` FOREIGN KEY (`channelId`) REFERENCES `channels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `listofuserchannels_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `mohsenpack_channel_data`
+-- Constraints for table `listofusere2es`
 --
-ALTER TABLE `mohsenpack_channel_data`
-  ADD CONSTRAINT `forwardDataId` FOREIGN KEY (`forward_data_id`) REFERENCES `forward_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `messageTypeId` FOREIGN KEY (`message_type_id`) REFERENCES `const_message_type` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+ALTER TABLE `listofusere2es`
+  ADD CONSTRAINT `listofusere2es_ibfk_1` FOREIGN KEY (`fromUser`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `listofusere2es_ibfk_2` FOREIGN KEY (`toUser`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `listofusere2es_ibfk_3` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `report_channel`
+-- Constraints for table `listofusergroups`
 --
-ALTER TABLE `report_channel`
-  ADD CONSTRAINT `channelId19` FOREIGN KEY (`channel_id`) REFERENCES `channels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `typeId20` FOREIGN KEY (`type_id`) REFERENCES `const_report_type` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `userId18` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `listofusergroups`
+  ADD CONSTRAINT `listofusergroups_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `listofusergroups_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `report_group`
+-- Constraints for table `userblocklist`
 --
-ALTER TABLE `report_group`
-  ADD CONSTRAINT `groupId22` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `typeId23` FOREIGN KEY (`type_id`) REFERENCES `const_report_type` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `userId21` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `treer00t_personal_chat_data`
---
-ALTER TABLE `treer00t_personal_chat_data`
-  ADD CONSTRAINT `forwardDataId26` FOREIGN KEY (`forward_data_id`) REFERENCES `forward_data` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `messageTypeId25` FOREIGN KEY (`message_type_id`) REFERENCES `const_message_type` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
---
--- Constraints for table `user_channel_chat_list`
---
-ALTER TABLE `user_channel_chat_list`
-  ADD CONSTRAINT `channelId27` FOREIGN KEY (`group_id`) REFERENCES `channels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `userId28` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `user_e2e_chat_list`
---
-ALTER TABLE `user_e2e_chat_list`
-  ADD CONSTRAINT `userId29` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `user_group_chat_list`
---
-ALTER TABLE `user_group_chat_list`
-  ADD CONSTRAINT `groupId31` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `userId30` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `userblocklist`
+  ADD CONSTRAINT `userblocklist_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `userblocklist_ibfk_2` FOREIGN KEY (`userTargetId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
